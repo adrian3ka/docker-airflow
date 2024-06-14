@@ -20,6 +20,7 @@ dag = DAG(
     default_args=default_args,
     description='A simple test DAG with a print task',
     schedule_interval=timedelta(days=1),
+    catchup=False,
 )
 
 # Define tasks
