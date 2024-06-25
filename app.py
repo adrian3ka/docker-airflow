@@ -1,8 +1,9 @@
 import os
 import pysftp
 import pandas as pd
+import json
+import xml.etree.ElementTree as ET
 import psycopg2
-import paramiko
 
 # SFTP configuration
 sftp_host = os.getenv('SFTP_HOST', 'sftp')
@@ -23,6 +24,13 @@ postgres_db = os.getenv('POSTGRES_DB', 'mydatabase')
 cnopts = pysftp.CnOpts()
 cnopts.hostkeys = None
 
+# Mapping of category codes to descriptions
+category_mapping = {
+    'P': 'Personal Loan',
+    'M': 'Mortgage Loan'
+    # Add more mappings as needed
+}
+
 def list_files_in_sftp():
     with pysftp.Connection(host=sftp_host, port=sftp_port, username=sftp_username, password=sftp_password, cnopts=cnopts) as sftp:
         sftp.cwd(sftp_directory)
@@ -35,7 +43,48 @@ def ingest_csv_to_postgresql(file_name):
         sftp.get(os.path.join(sftp_directory, file_name), local_file_path)
     
     df = pd.read_csv(local_file_path)
+    os.remove(local_file_path)
+    transform_and_ingest_data(df, file_name)
+
+def ingest_json_to_postgresql(file_name):
+    with pysftp.Connection(host=sftp_host, port=sftp_port, username=sftp_username, password=sftp_password, cnopts=cnopts) as sftp:
+        local_file_path = os.path.join('/tmp', file_name)
+        sftp.get(os.path.join(sftp_directory, file_name), local_file_path)
     
+    with open(local_file_path, 'r') as json_file:
+        data = json.load(json_file)
+    
+    os.remove(local_file_path)
+    
+    # Transform category_code to category_desc
+    for entry in data:
+        entry['category'] = category_mapping.get(entry['category_code'], 'Unknown')
+    
+    df = pd.json_normalize(data)
+    transform_and_ingest_data(df, file_name)
+
+def ingest_xml_to_postgresql(file_name):
+    with pysftp.Connection(host=sftp_host, port=sftp_port, username=sftp_username, password=sftp_password, cnopts=cnopts) as sftp:
+        local_file_path = os.path.join('/tmp', file_name)
+        sftp.get(os.path.join(sftp_directory, file_name), local_file_path)
+    
+    tree = ET.parse(local_file_path)
+    os.remove(local_file_path)
+    root = tree.getroot()
+
+    data = []
+    columns = []
+    for elem in root.findall('*'):
+        if not columns:
+            columns = list(elem.attrib.keys())
+        entry = {col: elem.attrib.get(col) for col in columns}
+        entry['category'] = category_mapping.get(entry['category_code'], 'Unknown')
+        data.append(entry)
+
+    df = pd.DataFrame(data, columns=columns + ['category'])
+    transform_and_ingest_data(df, file_name)
+
+def transform_and_ingest_data(df, file_name):
     conn = psycopg2.connect(
         host=postgres_host,
         port=postgres_port,
@@ -57,7 +106,6 @@ def ingest_csv_to_postgresql(file_name):
     conn.commit()
     cursor.close()
     conn.close()
-    os.remove(local_file_path)
 
     # Move the processed file to the 'processed' directory
     with pysftp.Connection(host=sftp_host, port=sftp_port, username=sftp_username, password=sftp_password, cnopts=cnopts) as sftp:
@@ -90,7 +138,7 @@ def create_postgres_table():
     cursor = conn.cursor()
     cursor.execute(
         """
-        CREATE TABLE loans ( loan_id INT PRIMARY KEY, borrower_name VARCHAR(255), loan_amount NUMERIC, interest_rate NUMERIC, loan_date DATE, category VARCHAR(255) );
+        CREATE TABLE IF NOT EXISTS loans ( loan_id INT PRIMARY KEY, borrower_name VARCHAR(255), loan_amount NUMERIC, interest_rate NUMERIC, loan_date DATE, category VARCHAR(255) );
         """
     )
     
@@ -105,6 +153,10 @@ def main():
     for file in files:
         if file.endswith('.csv'):
             ingest_csv_to_postgresql(file)
+        elif file.endswith('.json'):
+            ingest_json_to_postgresql(file)
+        elif file.endswith('.xml'):
+            ingest_xml_to_postgresql(file)
 
 if __name__ == "__main__":
     main()

@@ -1,0 +1,19 @@
+[
+    {
+      "loan_id": "2001",
+      "borrower_name": "John Doe",
+      "loan_amount": 50000,
+      "interest_rate": 3.5,
+      "loan_date": "2023-05-15",
+      "category_code": "P"
+    },
+    {
+      "loan_id": "2002",
+      "borrower_name": "Jane Smith",
+      "loan_amount": 75000,
+      "interest_rate": 4.2,
+      "loan_date": "2023-06-20",
+      "category_code": "M"
+    }
+  ]
+  
