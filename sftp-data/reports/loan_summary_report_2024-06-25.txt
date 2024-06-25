@@ -1,0 +1,27 @@
+Daily Loan Summary Report - 2024-06-25
+
+Category: Auto
+  Total Loans: 4
+  Average Loan Amount: $22000.00
+  Average Interest Rate: 6.02%
+
+Category: Business
+  Total Loans: 4
+  Average Loan Amount: $27500.00
+  Average Interest Rate: 5.05%
+
+Category: Education
+  Total Loans: 4
+  Average Loan Amount: $32000.00
+  Average Interest Rate: 5.00%
+
+Category: Home
+  Total Loans: 4
+  Average Loan Amount: $18000.00
+  Average Interest Rate: 4.60%
+
+Category: Personal
+  Total Loans: 4
+  Average Loan Amount: $12750.00
+  Average Interest Rate: 5.25%
+
