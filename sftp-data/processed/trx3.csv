@@ -1,0 +1,6 @@
+loan_id,borrower_name,loan_amount,interest_rate,loan_date,category
+16,Kate Williams,14000,5.3,2024-04-05,Personal
+17,Liam Johnson,19000,4.5,2024-05-15,Home
+18,Mia Brown,21000,6.2,2024-06-20,Auto
+19,Noah Davis,27000,5.1,2024-07-10,Business
+20,Olivia Wilson,31000,4.8,2024-08-25,Education
