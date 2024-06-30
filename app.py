@@ -30,38 +30,9 @@ def list_files_in_sftp():
     return files
 
 def ingest_csv_to_postgresql(file_name):
-    with pysftp.Connection(host=sftp_host, port=sftp_port, username=sftp_username, password=sftp_password, cnopts=cnopts) as sftp:
-        local_file_path = os.path.join('/tmp', file_name)
-        sftp.get(os.path.join(sftp_directory, file_name), local_file_path)
-    
-    df = pd.read_csv(local_file_path)
-    
-    conn = psycopg2.connect(
-        host=postgres_host,
-        port=postgres_port,
-        user=postgres_user,
-        password=postgres_password,
-        dbname=postgres_db
-    )
-    cursor = conn.cursor()
-    
-    for index, row in df.iterrows():
-        cursor.execute(
-            """
-            INSERT INTO loans (loan_id, borrower_name, loan_amount, interest_rate, loan_date, category) 
-            VALUES (%s, %s, %s, %s, %s, %s)
-            """,
-            (row['loan_id'], row['borrower_name'], row['loan_amount'], row['interest_rate'], row['loan_date'], row['category'])
-        )
-    
-    conn.commit()
-    cursor.close()
-    conn.close()
-    os.remove(local_file_path)
-
-    # Move the processed file to the 'processed' directory
-    with pysftp.Connection(host=sftp_host, port=sftp_port, username=sftp_username, password=sftp_password, cnopts=cnopts) as sftp:
-        sftp.rename(os.path.join(sftp_directory, file_name), os.path.join(sftp_processed_directory, file_name))
+    print(f"this function will ingest {file_name}")
+    #TODO: create postgres ingestion system
+    return 
 
 def create_processed_directory():
     with pysftp.Connection(host=sftp_host, port=sftp_port, username=sftp_username, password=sftp_password, cnopts=cnopts) as sftp:

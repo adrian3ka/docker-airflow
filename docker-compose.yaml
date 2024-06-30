@@ -10,33 +10,19 @@ services:
     environment:
       SFTP_USERS: "sftpuser:password:1001"
 
-  postgres:
-    image: postgres:13
-    environment:
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: postgres
-      POSTGRES_DB: mydatabase
-    volumes:
-      - postgres_data:/var/lib/postgresql/data
-    ports:
-      - "5432:5432"
+# TODO: create postgres configuration
 
   app:
     build:
       context: .
     depends_on:
       - sftp
-      - postgres
     environment:
       - SFTP_HOST=sftp
       - SFTP_PORT=22
       - SFTP_USERNAME=sftpuser
       - SFTP_PASSWORD=password
-      - POSTGRES_HOST=postgres
-      - POSTGRES_PORT=5432
-      - POSTGRES_USER=postgres
-      - POSTGRES_PASSWORD=postgres
-      - POSTGRES_DB=mydatabase
+      # TODO: add env to provide postgres connection info
     entrypoint: |
       /bin/sh -c \
       "while ! pg_isready -h postgres; do \
