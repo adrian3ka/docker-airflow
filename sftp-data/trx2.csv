@@ -1,0 +1,6 @@
+loan_id,borrower_name,loan_amount,interest_rate,loan_date,category
+11,Frank Green,15000,5.0,2023-11-01,Personal
+12,Grace Kim,20000,4.6,2023-12-15,Home
+13,Hank Brown,25000,5.8,2024-01-10,Auto
+14,Ivy Adams,30000,4.9,2024-02-20,Business
+15,Jackie Robinson,35000,5.4,2024-03-25,Education

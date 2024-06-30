@@ -16,15 +16,16 @@ report_directory = '/upload/reports'
 # PostgreSQL configuration
 postgres_host = os.getenv('POSTGRES_HOST', 'postgres')
 postgres_port = int(os.getenv('POSTGRES_PORT', 5432))
-postgres_user = os.getenv('POSTGRES_USER', 'postgres')
-postgres_password = os.getenv('POSTGRES_PASSWORD', 'postgres')
-postgres_db = os.getenv('POSTGRES_DB', 'mydatabase')
+postgres_user = os.getenv('POSTGRES_USER', 'airflow')
+postgres_password = os.getenv('POSTGRES_PASSWORD', 'airflow')
+postgres_db = os.getenv('POSTGRES_DB', 'airflow')
 
 # Disable host key checking
 cnopts = pysftp.CnOpts()
 cnopts.hostkeys = None
 
 def generate_daily_report():
+    create_report_directory()
     conn = psycopg2.connect(
         host=postgres_host,
         port=postgres_port,
@@ -94,12 +95,3 @@ def create_report_directory():
         except Exception as e:
             print(f"Error creating directory on SFTP server: {e}")
 
-if __name__ == "__main__":
-    create_report_directory()
-    # schedule.every().day.at("01:00").do(generate_daily_report)
-    schedule.every(1).minutes.do(generate_daily_report)
-
-    # Loop to run the scheduler continuously
-    while True:
-        schedule.run_pending()
-        time.sleep(60) 

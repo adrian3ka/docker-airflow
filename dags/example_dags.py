@@ -3,7 +3,7 @@ from airflow import DAG
 from airflow.operators.dummy import DummyOperator
 from airflow.operators.bash import BashOperator
 from utils.ingest import main as ingest
-from utils.report import main as report
+from utils.report import generate_daily_report
 from airflow.operators.python import PythonOperator
 
 # Define default arguments
@@ -35,8 +35,8 @@ ingest_task = PythonOperator(
 
 report_task = PythonOperator(
     task_id='report_task',
-    python_callable=report,
+    python_callable=generate_daily_report,
     dag=dag,
 )
 
-ingest >> report
+ingest_task >> report_task

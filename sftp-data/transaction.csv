@@ -1,0 +1,6 @@
+loan_id,borrower_name,loan_amount,interest_rate,loan_date,category
+1,John Doe,10000,5.5,2023-01-15,Personal
+2,Jane Smith,15000,4.5,2023-02-20,Home
+3,Emily Johnson,20000,6.0,2023-03-10,Auto
+4,Michael Brown,25000,4.9,2023-04-25,Business
+5,Linda Davis,30000,5.1,2023-05-30,Education

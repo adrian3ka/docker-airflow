@@ -21,6 +21,9 @@ services:
 
   airflow-init:
     image: apache/airflow:2.6.3
+    build:
+      context: .
+      dockerfile: ./Dockerfile
     depends_on:
       - postgres
     environment:

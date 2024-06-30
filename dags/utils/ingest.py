@@ -16,9 +16,9 @@ sftp_processed_directory = '/upload/processed'
 # PostgreSQL configuration
 postgres_host = os.getenv('POSTGRES_HOST', 'postgres')
 postgres_port = int(os.getenv('POSTGRES_PORT', 5432))
-postgres_user = os.getenv('POSTGRES_USER', 'postgres')
-postgres_password = os.getenv('POSTGRES_PASSWORD', 'postgres')
-postgres_db = os.getenv('POSTGRES_DB', 'mydatabase')
+postgres_user = os.getenv('POSTGRES_USER', 'airflow')
+postgres_password = os.getenv('POSTGRES_PASSWORD', 'airflow')
+postgres_db = os.getenv('POSTGRES_DB', 'airflow')
 
 # Disable host key checking
 cnopts = pysftp.CnOpts()
@@ -157,6 +157,3 @@ def main():
             ingest_json_to_postgresql(file)
         elif file.endswith('.xml'):
             ingest_xml_to_postgresql(file)
-
-if __name__ == "__main__":
-    main()
