@@ -1,0 +1,16 @@
+[2024-06-30T01:56:25.576+0000] {processor.py:157} INFO - Started process (PID=162) to work on /opt/airflow/dags/example_dags.py
+[2024-06-30T01:56:25.583+0000] {processor.py:826} INFO - Processing file /opt/airflow/dags/example_dags.py for tasks to queue
+[2024-06-30T01:56:25.590+0000] {logging_mixin.py:150} INFO - [2024-06-30T01:56:25.589+0000] {dagbag.py:541} INFO - Filling up the DagBag from /opt/airflow/dags/example_dags.py
+[2024-06-30T01:56:25.770+0000] {logging_mixin.py:150} INFO - [2024-06-30T01:56:25.753+0000] {dagbag.py:350} ERROR - Failed to import: /opt/airflow/dags/example_dags.py
+Traceback (most recent call last):
+  File "/home/airflow/.local/lib/python3.7/site-packages/airflow/models/dagbag.py", line 346, in parse
+    loader.exec_module(new_module)
+  File "<frozen importlib._bootstrap_external>", line 728, in exec_module
+  File "<frozen importlib._bootstrap>", line 219, in _call_with_frames_removed
+  File "/opt/airflow/dags/example_dags.py", line 5, in <module>
+    from utils.ingest import main as ingest
+  File "/opt/airflow/dags/utils/ingest.py", line 2, in <module>
+    import pysftp
+ModuleNotFoundError: No module named 'pysftp'
+[2024-06-30T01:56:25.773+0000] {processor.py:838} WARNING - No viable dags retrieved from /opt/airflow/dags/example_dags.py
+[2024-06-30T01:56:25.888+0000] {processor.py:179} INFO - Processing /opt/airflow/dags/example_dags.py took 0.352 seconds

@@ -1,6 +1,15 @@
 version: '3.8'
 
 services:
+  sftp:
+    image: atmoz/sftp
+    volumes:
+      - ./sftp-data:/home/sftpuser/upload
+    ports:
+      - "2222:22"
+    environment:
+      SFTP_USERS: "sftpuser:password:1001"
+      
   postgres:
     image: postgres:13
     environment:

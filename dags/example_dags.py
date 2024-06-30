@@ -2,6 +2,9 @@ from datetime import datetime, timedelta
 from airflow import DAG
 from airflow.operators.dummy import DummyOperator
 from airflow.operators.bash import BashOperator
+from utils.ingest import main as ingest
+from utils.report import main as report
+from airflow.operators.python import PythonOperator
 
 # Define default arguments
 default_args = {
@@ -23,22 +26,17 @@ dag = DAG(
     catchup=False,
 )
 
-# Define tasks
-start = DummyOperator(
-    task_id='start',
+
+ingest_task = PythonOperator(
+    task_id='ingest_task',
+    python_callable=ingest,
     dag=dag,
 )
 
-print_hello = BashOperator(
-    task_id='print_hello',
-    bash_command='echo "Hello, Airflow!"',
+report_task = PythonOperator(
+    task_id='report_task',
+    python_callable=report,
     dag=dag,
 )
 
-end = DummyOperator(
-    task_id='end',
-    dag=dag,
-)
-
-# Set task dependencies
-start >> print_hello >> end
+ingest >> report
