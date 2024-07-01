@@ -4,7 +4,7 @@ services:
   sftp:
     image: atmoz/sftp
     volumes:
-      - ./sftp-data:/home/sftpuser/upload
+      - ./sftp-data:/home/sftpuser/upload:rw
     ports:
       - "2222:22"
     environment:
@@ -17,7 +17,7 @@ services:
       POSTGRES_PASSWORD: postgres
       POSTGRES_DB: mydatabase
     volumes:
-      - postgres_data:/var/lib/postgresql/data
+      - postgres_data:/var/lib/postgresql/data:rw
     ports:
       - "5432:5432"
 
