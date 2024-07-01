@@ -90,7 +90,7 @@ def create_postgres_table():
     cursor = conn.cursor()
     cursor.execute(
         """
-        CREATE TABLE loans ( loan_id INT PRIMARY KEY, borrower_name VARCHAR(255), loan_amount NUMERIC, interest_rate NUMERIC, loan_date DATE, category VARCHAR(255) );
+        CREATE TABLE IF NOT EXISTS loans ( loan_id INT PRIMARY KEY, borrower_name VARCHAR(255), loan_amount NUMERIC, interest_rate NUMERIC, loan_date DATE, category VARCHAR(255) );
         """
     )
     
