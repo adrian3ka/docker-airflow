@@ -2,8 +2,6 @@ import os
 import datetime
 import pysftp
 import psycopg2
-import schedule
-import time
 
 # SFTP configuration
 sftp_host = os.getenv('SFTP_HOST', 'sftp')

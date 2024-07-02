@@ -13,9 +13,9 @@ services:
   postgres:
     image: postgres:13
     environment:
-      - POSTGRES_USER=airflow
-      - POSTGRES_PASSWORD=airflow
-      - POSTGRES_DB=airflow
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_DB=mydatabase
     volumes:
       - postgres_data:/var/lib/postgresql/data
 
@@ -29,7 +29,7 @@ services:
     environment:
       - AIRFLOW__CORE__LOAD_EXAMPLES=False
       - AIRFLOW__CORE__EXECUTOR=LocalExecutor
-      - AIRFLOW__CORE__SQL_ALCHEMY_CONN=postgresql+psycopg2://airflow:airflow@postgres/airflow
+      - AIRFLOW__CORE__SQL_ALCHEMY_CONN=postgresql+psycopg2://postgres:postgres@postgres/mydatabase
       - AIRFLOW__CORE__FERNET_KEY=jKPL3Gthm0RPlr2sXxyKo1XYPvDwbG4r1xQ9zI3P4U8=
       - AIRFLOW__WEBSERVER__SECRET_KEY=efb8d9d99b7f4b1b87068d6c3d5e4c62
     entrypoint: |
@@ -52,13 +52,13 @@ services:
     environment:
       - AIRFLOW__CORE__LOAD_EXAMPLES=False
       - AIRFLOW__CORE__EXECUTOR=LocalExecutor
-      - AIRFLOW__CORE__SQL_ALCHEMY_CONN=postgresql+psycopg2://airflow:airflow@postgres/airflow
+      - AIRFLOW__CORE__SQL_ALCHEMY_CONN=postgresql+psycopg2://postgres:postgres@postgres/mydatabase
       - AIRFLOW__CORE__FERNET_KEY=jKPL3Gthm0RPlr2sXxyKo1XYPvDwbG4r1xQ9zI3P4U8=
       - AIRFLOW__WEBSERVER__SECRET_KEY=efb8d9d99b7f4b1b87068d6c3d5e4c62
     entrypoint: |
       /bin/bash -c \
       "while ! nc -z postgres 5432; do sleep 1; done; \
-      while ! psql postgresql://airflow:airflow@postgres/airflow -c 'SELECT 1 FROM alembic_version LIMIT 1;' 2>/dev/null; do \
+      while ! psql postgresql://postgres:postgres@postgres/mydatabase -c 'SELECT 1 FROM alembic_version LIMIT 1;' 2>/dev/null; do \
         echo 'Waiting for Airflow metadata database to be initialized...'; sleep 1; \
       done; \
       airflow webserver"
@@ -75,7 +75,7 @@ services:
     environment:
       - AIRFLOW__CORE__LOAD_EXAMPLES=False
       - AIRFLOW__CORE__EXECUTOR=LocalExecutor
-      - AIRFLOW__CORE__SQL_ALCHEMY_CONN=postgresql+psycopg2://airflow:airflow@postgres/airflow
+      - AIRFLOW__CORE__SQL_ALCHEMY_CONN=postgresql+psycopg2://postgres:postgres@postgres/mydatabase
       - AIRFLOW__CORE__FERNET_KEY=jKPL3Gthm0RPlr2sXxyKo1XYPvDwbG4r1xQ9zI3P4U8=
       - AIRFLOW__WEBSERVER__SECRET_KEY=efb8d9d99b7f4b1b87068d6c3d5e4c62
     command: scheduler
