@@ -14,9 +14,9 @@ report_directory = '/upload/reports'
 # PostgreSQL configuration
 postgres_host = os.getenv('POSTGRES_HOST', 'postgres')
 postgres_port = int(os.getenv('POSTGRES_PORT', 5432))
-postgres_user = os.getenv('POSTGRES_USER', 'airflow')
-postgres_password = os.getenv('POSTGRES_PASSWORD', 'airflow')
-postgres_db = os.getenv('POSTGRES_DB', 'airflow')
+postgres_user = os.getenv('POSTGRES_USER', 'postgres')
+postgres_password = os.getenv('POSTGRES_PASSWORD', 'postgres')
+postgres_db = os.getenv('POSTGRES_DB', 'mydatabase')
 
 # Disable host key checking
 cnopts = pysftp.CnOpts()
