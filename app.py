@@ -94,7 +94,28 @@ def create_report_directory():
         except Exception as e:
             print(f"Error creating directory on SFTP server: {e}")
 
+def create_postgres_table():
+    
+    conn = psycopg2.connect(
+        host=postgres_host,
+        port=postgres_port,
+        user=postgres_user,
+        password=postgres_password,
+        dbname=postgres_db
+    )
+    cursor = conn.cursor()
+    cursor.execute(
+        """
+        CREATE TABLE IF NOT EXISTS loans ( loan_id INT PRIMARY KEY, borrower_name VARCHAR(255), loan_amount NUMERIC, interest_rate NUMERIC, loan_date DATE, category VARCHAR(255) );
+        """
+    )
+    
+    conn.commit()
+    cursor.close()
+    conn.close()
+
 if __name__ == "__main__":
+    create_postgres_table()
     create_report_directory()
     # schedule.every().day.at("01:00").do(generate_daily_report)
     schedule.every(1).minutes.do(generate_daily_report)
